@@ -47,17 +47,17 @@ export default function Pasar() {
   }, [])
 
   const formatPrice = (price) => {
-    if (price >= 1000) return `$${price.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
-    if (price >= 1) return `$${price.toFixed(2)}`
-    if (price >= 0.01) return `$${price.toFixed(4)}`
-    return `$${price.toFixed(8)}`
+    if (price >= 1000) return '$' + price.toLocaleString('en-US', { maximumFractionDigits: 0 })
+    if (price >= 1) return '$' + price.toFixed(2)
+    if (price >= 0.01) return '$' + price.toFixed(4)
+    return '$' + price.toFixed(8)
   }
 
   return (
-    <div>
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="p-4 pb-2">
-        <h1 className="text-2xl font-medium text-gray-900">Harga pasar</h1>
-        <p className="text-sm text-gray-500">Real-time · CoinGecko</p>
+        <h1 className="text-2xl font-medium text-gray-900 dark:text-white">Harga pasar</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Real-time · CoinGecko</p>
       </div>
 
       {loading ? (
@@ -70,8 +70,8 @@ export default function Pasar() {
             const isUp = change >= 0
             const imgUrl = images[coin.id]
             return (
-              <div key={coin.id} className={`flex items-center gap-3 py-4 ${i < COINS.length - 1 ? 'border-b border-gray-100' : ''}`}>
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
+              <div key={coin.id} className={'flex items-center gap-3 py-4 ' + (i < COINS.length - 1 ? 'border-b border-gray-100 dark:border-gray-800' : '')}>
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
                   {imgUrl ? (
                     <img src={imgUrl} alt={coin.name} width={40} height={40} />
                   ) : (
@@ -79,15 +79,15 @@ export default function Pasar() {
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{coin.name}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{coin.name}</p>
                   <p className="text-xs text-gray-400">{coin.symbol}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {data ? formatPrice(data.usd) : '—'}
                   </p>
-                  <p className={`text-xs font-medium ${isUp ? 'text-emerald-600' : 'text-red-500'}`}>
-                    {change ? `${isUp ? '+' : ''}${change.toFixed(1)}%` : '—'}
+                  <p className={'text-xs font-medium ' + (isUp ? 'text-emerald-600' : 'text-red-500')}>
+                    {change ? (isUp ? '+' : '') + change.toFixed(1) + '%' : '—'}
                   </p>
                 </div>
               </div>

@@ -21,9 +21,7 @@ export default function Konversi() {
       const ids = COINS.map(c => c.id).join(',')
       const res = await fetch('/api/allprices')
       const data = await res.json()
-      if (data && Object.keys(data).length > 0) {
-        setPrices(data)
-      }
+      if (data && Object.keys(data).length > 0) setPrices(data)
     } catch (e) {
       console.error(e)
     } finally {
@@ -33,69 +31,65 @@ export default function Konversi() {
 
   useEffect(() => {
     fetchPrices()
-    const interval = setInterval(fetchPrices, 30000)
+    const interval = setInterval(fetchPrices, 120000)
     return () => clearInterval(interval)
   }, [])
 
   const getResult = () => {
-    if (!prices[fromCoin] || !prices[fromCoin][toCurrency]) return '—'
-    const price = prices[fromCoin][toCurrency]
+    const price = prices?.[fromCoin]?.[toCurrency]
+    if (!price) return '—'
     const result = amount * price
-    if (toCurrency === 'idr') {
-      return `Rp ${result.toLocaleString('id-ID', { maximumFractionDigits: 0 })}`
-    }
-    if (result >= 1000) return `$${result.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
-    if (result >= 1) return `$${result.toFixed(2)}`
-    return `$${result.toFixed(4)}`
+    if (toCurrency === 'idr') return 'Rp ' + result.toLocaleString('id-ID', { maximumFractionDigits: 0 })
+    if (result >= 1000) return '$' + result.toLocaleString('en-US', { maximumFractionDigits: 0 })
+    if (result >= 1) return '$' + result.toFixed(2)
+    return '$' + result.toFixed(4)
   }
 
   const getRate = () => {
-    if (!prices[fromCoin] || !prices[fromCoin][toCurrency]) return '—'
+    const price = prices?.[fromCoin]?.[toCurrency]
+    if (!price) return '—'
     const coin = COINS.find(c => c.id === fromCoin)
-    const price = prices[fromCoin][toCurrency]
-    if (toCurrency === 'idr') {
-      return `1 ${coin.symbol} = Rp ${price.toLocaleString('id-ID', { maximumFractionDigits: 0 })}`
-    }
-    return `1 ${coin.symbol} = $${price.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
+    if (toCurrency === 'idr') return '1 ' + coin.symbol + ' = Rp ' + price.toLocaleString('id-ID', { maximumFractionDigits: 0 })
+    return '1 ' + coin.symbol + ' = $' + price.toLocaleString('en-US', { maximumFractionDigits: 0 })
   }
 
   const allCoinsInBTC = () => {
-    if (!prices['bitcoin']) return []
-    const btcUsd = prices['bitcoin'].usd
+    const btcUsd = prices?.['bitcoin']?.usd
+    if (!btcUsd) return []
     return [
-      { label: 'USD', value: `$${btcUsd.toLocaleString('en-US', { maximumFractionDigits: 0 })}` },
-      { label: 'IDR', value: prices['bitcoin']?.idr ? `Rp ${(prices['bitcoin'].idr).toLocaleString('id-ID', { maximumFractionDigits: 0 })}` : '—' },
-      { label: 'ETH', value: prices['ethereum'] ? (btcUsd / prices['ethereum'].usd).toFixed(2) : '—' },
-      { label: 'SOL', value: prices['solana'] ? (btcUsd / prices['solana'].usd).toFixed(1) : '—' },
-      { label: 'BNB', value: prices['binancecoin'] ? (btcUsd / prices['binancecoin'].usd).toFixed(1) : '—' },
-      { label: 'XRP', value: prices['ripple'] ? Math.round(btcUsd / prices['ripple'].usd).toLocaleString() : '—' },
+      { label: 'USD', value: '$' + btcUsd.toLocaleString('en-US', { maximumFractionDigits: 0 }) },
+      { label: 'IDR', value: prices['bitcoin']?.idr ? 'Rp ' + prices['bitcoin'].idr.toLocaleString('id-ID', { maximumFractionDigits: 0 }) : '—' },
+      { label: 'ETH', value: prices['ethereum']?.usd ? (btcUsd / prices['ethereum'].usd).toFixed(2) : '—' },
+      { label: 'SOL', value: prices['solana']?.usd ? (btcUsd / prices['solana'].usd).toFixed(1) : '—' },
+      { label: 'BNB', value: prices['binancecoin']?.usd ? (btcUsd / prices['binancecoin'].usd).toFixed(1) : '—' },
+      { label: 'XRP', value: prices['ripple']?.usd ? Math.round(btcUsd / prices['ripple'].usd).toLocaleString() : '—' },
     ]
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mb-5">
-        <h1 className="text-2xl font-medium text-gray-900">Konversi</h1>
-        <p className="text-sm text-gray-500">Tukar antar koin & mata uang</p>
+        <h1 className="text-2xl font-medium text-gray-900 dark:text-white">Konversi</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Tukar antar koin & mata uang</p>
       </div>
 
       {loading ? (
         <div className="text-center text-gray-400 py-10">Memuat kurs...</div>
       ) : (
-        <>
-          <div className="bg-gray-100 rounded-xl p-4 mb-3">
-            <p className="text-xs text-gray-500 mb-2">Dari</p>
+        <div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-3 border border-gray-100 dark:border-gray-700">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Dari</p>
             <div className="flex items-center gap-3">
               <input
                 type="number"
-                value={amount || ""}
-                onChange={(e) => setAmount(e.target.value === "" ? "" : Number(e.target.value))}
-                className="text-3xl font-medium text-gray-900 flex-1 outline-none w-full bg-transparent"
+                value={amount || ''}
+                onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))}
+                className="text-3xl font-medium text-gray-900 dark:text-white flex-1 outline-none bg-transparent"
               />
               <select
                 value={fromCoin}
                 onChange={(e) => setFromCoin(e.target.value)}
-                className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-medium text-gray-800"
+                className="bg-gray-100 dark:bg-gray-700 border-0 rounded-lg px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200"
               >
                 {COINS.map(c => (
                   <option key={c.id} value={c.id}>{c.symbol}</option>
@@ -107,20 +101,20 @@ export default function Konversi() {
           <div className="flex justify-center mb-3">
             <button
               onClick={() => setToCurrency(toCurrency === 'usd' ? 'idr' : 'usd')}
-              className="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-500"
+              className="w-9 h-9 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400"
             >
               ⇅
             </button>
           </div>
 
-          <div className="bg-gray-100 rounded-xl p-4 mb-5">
-            <p className="text-xs text-gray-500 mb-2">Ke</p>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-5 border border-gray-100 dark:border-gray-700">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Ke</p>
             <div className="flex items-center gap-3">
-              <p className="text-3xl font-medium text-gray-900 flex-1">{getResult()}</p>
+              <p className="text-3xl font-medium text-gray-900 dark:text-white flex-1">{getResult()}</p>
               <select
                 value={toCurrency}
                 onChange={(e) => setToCurrency(e.target.value)}
-                className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-medium text-gray-800"
+                className="bg-gray-100 dark:bg-gray-700 border-0 rounded-lg px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200"
               >
                 <option value="usd">USD</option>
                 <option value="idr">IDR</option>
@@ -130,15 +124,15 @@ export default function Konversi() {
           </div>
 
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Semua Koin (1 BTC =)</p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {allCoinsInBTC().map((item) => (
-              <div key={item.label} className="bg-gray-100 rounded-xl p-3">
-                <p className="text-xs text-gray-400">{item.label}</p>
-                <p className="text-base font-medium text-gray-900">{item.value}</p>
+              <div key={item.label} className="bg-white dark:bg-gray-800 rounded-xl p-3 border border-gray-100 dark:border-gray-700">
+                <p className="text-xs text-gray-400 dark:text-gray-500">{item.label}</p>
+                <p className="text-base font-medium text-gray-900 dark:text-white">{item.value}</p>
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   )

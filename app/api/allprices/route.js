@@ -10,7 +10,7 @@ const ALL_IDS = [
 export async function GET() {
   const now = Date.now()
 
-  if (cache && now - lastFetch < 120000) {
+  if (cache && now - lastFetch < 300000) {
     return Response.json(cache)
   }
 
@@ -23,6 +23,7 @@ export async function GET() {
     if (data && !data.status?.error_code) {
       cache = data
       lastFetch = now
+      return Response.json(cache)
     }
     return Response.json(cache ?? {})
   } catch (e) {

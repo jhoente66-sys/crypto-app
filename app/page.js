@@ -69,15 +69,15 @@ export default function Beranda() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="flex justify-between items-start mb-5">
         <div>
-          <h1 className="text-2xl font-medium text-gray-900">Halo, Selamat datang</h1>
-          <p className="text-sm text-gray-500">Pasar crypto hari ini</p>
+          <h1 className="text-2xl font-medium text-gray-900 dark:text-white">Halo, Selamat datang</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Pasar crypto hari ini</p>
         </div>
         <button
           onClick={() => window.location.reload()}
-          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-600"
+          className="border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300"
         >
           Refresh
         </button>
@@ -88,8 +88,8 @@ export default function Beranda() {
       ) : (
         <div>
           <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="bg-gray-100 rounded-xl p-4">
-              <p className="text-xs text-gray-500 mb-1">Fear &amp; Greed</p>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Fear &amp; Greed</p>
               <p className={'text-2xl font-medium ' + fgColor(fearGreed?.value)}>
                 {fearGreed?.value ?? '—'}
               </p>
@@ -97,41 +97,41 @@ export default function Beranda() {
                 {fearGreed ? fgLabel(Number(fearGreed.value)) : '—'}
               </p>
             </div>
-            <div className="bg-gray-100 rounded-xl p-4">
-              <p className="text-xs text-gray-500 mb-1">BTC Dominance</p>
-              <p className="text-2xl font-medium text-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">BTC Dominance</p>
+              <p className="text-2xl font-medium text-gray-900 dark:text-white">
                 {global ? global.market_cap_percentage.btc.toFixed(1) + '%' : '—'}
               </p>
               <p className="text-xs text-gray-400 mt-1">dari total pasar</p>
             </div>
-            <div className="bg-gray-100 rounded-xl p-4">
-              <p className="text-xs text-gray-500 mb-1">Market Cap</p>
-              <p className="text-2xl font-medium text-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Market Cap</p>
+              <p className="text-2xl font-medium text-gray-900 dark:text-white">
                 {global ? formatCap(global.total_market_cap.usd) : '—'}
               </p>
               <p className={'text-xs mt-1 ' + (global?.market_cap_change_percentage_24h_usd >= 0 ? 'text-emerald-600' : 'text-red-500')}>
                 {global ? global.market_cap_change_percentage_24h_usd.toFixed(1) + '% 24j' : '—'}
               </p>
             </div>
-            <div className="bg-gray-100 rounded-xl p-4">
-              <p className="text-xs text-gray-500 mb-1">Volume 24j</p>
-              <p className="text-2xl font-medium text-gray-900">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Volume 24j</p>
+              <p className="text-2xl font-medium text-gray-900 dark:text-white">
                 {global ? formatCap(global.total_volume.usd) : '—'}
               </p>
               <p className="text-xs text-gray-400 mt-1">total pasar</p>
             </div>
           </div>
 
-          <div className="bg-gray-100 rounded-xl p-4 mb-5">
-            <p className="text-sm text-gray-500 mb-3">Sentimen pasar</p>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Sentimen pasar</p>
             {[
               { label: 'Bullish', pct: 72, color: 'bg-emerald-500', textColor: 'text-emerald-600' },
               { label: 'Netral', pct: 15, color: 'bg-gray-400', textColor: 'text-gray-500' },
               { label: 'Bearish', pct: 13, color: 'bg-red-400', textColor: 'text-red-500' },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-3 mb-2">
-                <span className="text-sm text-gray-700 w-14">{s.label}</span>
-                <div className="flex-1 bg-white rounded-full h-1.5">
+                <span className="text-sm text-gray-700 dark:text-gray-300 w-14">{s.label}</span>
+                <div className="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
                   <div className={s.color + ' h-1.5 rounded-full'} style={{ width: s.pct + '%' }}></div>
                 </div>
                 <span className={'text-sm font-medium w-9 text-right ' + s.textColor}>{s.pct}%</span>
@@ -143,12 +143,12 @@ export default function Beranda() {
           {news.length > 0 ? news.map((item, i) => {
             const tag = getCoinTag(item.title)
             return (
-              <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block bg-white border border-gray-100 rounded-xl p-4 mb-3">
+              <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="block bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 mb-3">
                 <div className="flex gap-2 mb-2">
                   <span className={'text-xs px-2 py-0.5 rounded-full font-medium ' + tag.color}>{tag.label}</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-gray-100 text-gray-600">{item.news_site}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">{item.news_site}</span>
                 </div>
-                <p className="text-sm font-medium text-gray-800 leading-snug mb-1">{item.title}</p>
+                <p className="text-sm font-medium text-gray-800 dark:text-gray-100 leading-snug mb-1">{item.title}</p>
                 <p className="text-xs text-gray-400">{timeAgo(item.updated_at)}</p>
               </a>
             )
