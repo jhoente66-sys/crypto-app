@@ -41,7 +41,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex z-50 pb-2">
+    <nav style={{transform: 'translateZ(0)'}} className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex z-[9999] pb-2">
       {menus.map((menu) => {
         const active = pathname === menu.href
         return (
