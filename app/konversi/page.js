@@ -7,6 +7,15 @@ const COINS = [
   { id: 'solana', symbol: 'SOL' },
   { id: 'binancecoin', symbol: 'BNB' },
   { id: 'ripple', symbol: 'XRP' },
+  { id: 'cardano', symbol: 'ADA' },
+  { id: 'dogecoin', symbol: 'DOGE' },
+  { id: 'polkadot', symbol: 'DOT' },
+  { id: 'tron', symbol: 'TRX' },
+  { id: 'litecoin', symbol: 'LTC' },
+  { id: 'shiba-inu', symbol: 'SHIB' },
+  { id: 'uniswap', symbol: 'UNI' },
+  { id: 'chainlink', symbol: 'LINK' },
+  { id: 'avalanche-2', symbol: 'AVAX' },
 ]
 
 const CURRENCIES = [
